@@ -29,7 +29,17 @@ Some prompts to answer:
 
 You can include a simple diagram or bullet list if helpful.
 
+### Algorithm Recipe
+Our recommendation engine uses a hybrid scoring system combining categorical matching and numerical distance tracking:
+1. **Genre Match (+2.0 pts):** Direct bonus if the song matches the user's primary favorite genre.
+2. **Mood Match (+1.0 pt):** Direct bonus if the song matches the user's current vibe.
+3. **Energy Similarity (Up to +1.0 pt):** Calculated using absolute error subtraction: `1.0 - abs(song_energy - target_energy)`. A perfect match yields 1.0 point, while opposing extremes yield 0.0 points.
+
+### Potential Biases & Limitations
+* **Genre Dominance:** Because a genre match provides twice the weight of a mood match, the system may heavily over-prioritize genre boundaries, potentially filtering out an incredibly relevant, high-energy Electronic track for a user who selected Rock.
+* **Cold Start / Fixed Limits:** The system entirely relies on explicit user inputs and cannot currently infer shifts in mood based on skipped tracks or listening time.
 ---
+
 Overview of Real-World Systems
 Modern music platforms rely on two primary recommendation frameworks:
 Collaborative Filtering: Analyzes user behavior patterns (likes, shares, skips) to group similar users together and recommend music based on collective listening habits.
