@@ -1,4 +1,4 @@
-from src.recommender import Song, UserProfile, Recommender
+from src.recommender import Song, UserProfile, Recommender, score_song
 
 def make_small_recommender() -> Recommender:
     songs = [
@@ -59,3 +59,25 @@ def test_explain_recommendation_returns_non_empty_string():
     explanation = rec.explain_recommendation(user, song)
     assert isinstance(explanation, str)
     assert explanation.strip() != ""
+
+
+def test_score_song_uses_hybrid_scoring_and_reason_strings():
+    user_prefs = {
+        "genre": "pop",
+        "mood": "happy",
+        "energy": 0.8,
+    }
+    song = {
+        "genre": "pop",
+        "mood": "happy",
+        "energy": 0.8,
+    }
+
+    score, reasons = score_song(user_prefs, song)
+
+    assert score == 4.0
+    assert reasons == [
+        "genre match (pop) (+2.0)",
+        "mood match (happy) (+1.0)",
+        "energy similarity (+1.00)",
+    ]
