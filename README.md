@@ -20,7 +20,7 @@ Our original rule-based algorithm operates via an additive point-accumulator sys
 2. **Mood Match (`+1.0` point):** Secondary bonus if the semantic mood label matches exactly.
 3. **Energy Proximity (Up to `+1.0` point):** A continuous fraction calculated using absolute mathematical distance:
 
-$$\text{Score} = 1.0 - | \text{target\_energy} - \text{song\_energy} |$$
+`Score = 1.0 - abs(target_energy - song_energy)`
 
 #### Phase 4 Experimental Pipeline (`score_song_experimental_weights`)
 To evaluate structural bias, an experimental configuration was added to shift the balance of power:
@@ -28,7 +28,7 @@ To evaluate structural bias, an experimental configuration was added to shift th
 2. **Mood Match (`+1.0` point):** Maintained constant to serve as a baseline.
 3. **Energy Proximity (Up to `+2.0` points):** The continuous similarity fraction was scaled up by a multiplier of `2.0` to prioritize exact acoustic alignment over metadata labels:
 
-$$\text{Score} = 2.0 \times (1.0 - | \text{target\_energy} - \text{song\_energy} |)$$
+`Score = 2.0 * (1.0 - abs(target_energy - song_energy))`
 
 ---
 
