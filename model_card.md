@@ -109,3 +109,37 @@ The scoring system exhibits an overwhelming structural bias toward categorical g
  [5] Score: 0.9 | 'Focus Flow' by LoRoom
      (Actuals -> Genre: lofi, Mood: focused, Energy: 0.4)
 ---------------------------------------------------------------------------
+```
+
+### Profile Comparisons and Analysis
+* **Profile 1 vs. Dataset Reality:** Testing a contradictory request ("High-Energy Sad Pop") revealed that the mathematical bonus for matching "pop" (+2.0) completely overpowered the user's emotional request for "sad" music. The system recommended "Gym Hero" (an intense workout track) as its top choice, completely failing the user's real mood constraint.
+* **Profile 2 Overrides:** Testing an unavailable genre ("classical") successfully stripped away the genre bias. This revealed a secondary surprise: categorical "mood" matching completely overrides raw "energy distance." "Focus Flow" beat out "Weightless" because its explicit "focused" tag provided +1.0 point, even though "Weightless" sat almost perfectly on the user's continuous energy target.
+* **Profile 3 Midpoint Behavior:** Placing the energy target at exactly `0.5` severely penalized both hyper-high and hyper-low tracks. This forced the system to lean entirely on how well rock music was represented in our dataset, causing the extreme track "Storm Runner" to dominate simply due to its heavy +2.0 genre alignment bonus.
+
+### Plain Language Summary
+When analyzing how the system behaves, it becomes clear that our algorithm treats song features like an unequal hierarchy rather than a balanced mix. For example, when a user asks for "Anxious High-Energy Joy" (Pop, Sad, 0.95 Energy), the song "Gym Hero" shoots straight to the top of the list. To a human, recommending an intense gym-workout song to someone who specifically asked for "sad" music feels completely wrong. 
+
+However, because our code awards a massive 2.0-point bonus just for matching the word "Pop", any pop song gets an unfair head start. The formula values matching the "Pop" label way more than it punishes the fact that the song is completely missing the "Sad" mood. Because "Gym Hero" has the correct genre and matches the fast-paced energy target, its high score completely overpowers and buries actual lower-energy sad tracks. In short, the "Genre" rule acts like a bully in our math equation, forcing workout tracks onto people who just wanted to listen to a melancholy melody.
+
+---
+
+## 8. Future Work  
+
+Ideas for how you would improve the model next.  
+
+Prompts:  
+- Additional features or preferences  
+- Better ways to explain recommendations  
+- Improving diversity among the top results  
+- Handling more complex user tastes  
+
+---
+
+## 9. Personal Reflection  
+
+A few sentences about your experience.  
+
+Prompts:  
+- What you learned about recommender systems  
+- Something unexpected or interesting you discovered  
+- How this changed the way you think about music recommendation apps
