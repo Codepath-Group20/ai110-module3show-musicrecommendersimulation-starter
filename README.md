@@ -18,14 +18,17 @@ This project features a simplified, content-based music recommendation engine wr
 Our original rule-based algorithm operates via an additive point-accumulator system:
 1. **Genre Match (`+2.0` points):** Direct bonus if the song category matches the user's favorite genre string exactly.
 2. **Mood Match (`+1.0` point):** Secondary bonus if the semantic mood label matches exactly.
-3. **Energy Proximity (Up to `+1.0` point):** A continuous fraction calculated using absolute distance: 
-   $$\text{Score} = 1.0 - | \text{target\_energy} - \text{song\_energy} |$$
+3. **Energy Proximity (Up to `+1.0` point):** A continuous fraction calculated using absolute mathematical distance:
+
+$$\text{Score} = 1.0 - | \text{target\_energy} - \text{song\_energy} |$$
 
 #### Phase 4 Experimental Pipeline (`score_song_experimental_weights`)
-To evaluate structural bias, an experimental configuration was added:
-1. **Genre Match (`+1.0` point):** Categorical weight was cut in half to reduce genre domination.
-2. **Mood Match (`+1.0` point):** Retained at the same level.
-3. **Energy Proximity (Up to `+2.0` points):** Scaled up by a multiplier of `2.0` to elevate continuous track acoustics above metadata tags.
+To evaluate structural bias, an experimental configuration was added to shift the balance of power:
+1. **Genre Match (`+1.0` point):** The categorical weight was cut in half to prevent genre from completely overpowering user mood.
+2. **Mood Match (`+1.0` point):** Maintained constant to serve as a baseline.
+3. **Energy Proximity (Up to `+2.0` points):** The continuous similarity fraction was scaled up by a multiplier of `2.0` to prioritize exact acoustic alignment over metadata labels:
+
+$$\text{Score} = 2.0 \times (1.0 - | \text{target\_energy} - \text{song\_energy} |)$$
 
 ---
 
