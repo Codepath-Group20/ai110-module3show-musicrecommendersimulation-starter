@@ -43,56 +43,7 @@ The scoring system exhibits an overwhelming structural bias toward categorical g
 
 ## 7. Evaluation  
 
-### [LOG SET A] Original Baseline Stress Test Results
-
-```text
-🚀 STRESS TESTING: Profile 1: Paradoxical Request ('Anxious High-Energy Joy')
-   Criteria -> Genre: pop, Mood: sad, Target Energy: 0.95
----------------------------------------------------------------------------
- [1] Score: 2.98 | 'Gym Hero' by Max Pulse
-     (Actuals -> Genre: pop, Mood: intense, Energy: 0.93)
- [2] Score: 2.87 | 'Sunrise City' by Neon Echo
-     (Actuals -> Genre: pop, Mood: happy, Energy: 0.82)
- [3] Score: 1.0 | 'Spitfire' by The Prodigy
-     (Actuals -> Genre: electronic, Mood: aggressive, Energy: 0.95)
- [4] Score: 0.97 | 'Master of Puppets' by Metallica
-     (Actuals -> Genre: metal, Mood: intense, Energy: 0.92)
- [5] Score: 0.96 | 'Storm Runner' by Voltline
-     (Actuals -> Genre: rock, Mood: intense, Energy: 0.91)
----------------------------------------------------------------------------
-
-🚀 STRESS TESTING: Profile 2: Genre-Defying Pure Vibe ('The Fluid Acoustic')
-   Criteria -> Genre: classical, Mood: focused, Target Energy: 0.1
----------------------------------------------------------------------------
- [1] Score: 1.7 | 'Focus Flow' by LoRoom
-     (Actuals -> Genre: lofi, Mood: focused, Energy: 0.4)
- [2] Score: 0.98 | 'Weightless' by Marconi Union
-     (Actuals -> Genre: ambient, Mood: calm, Energy: 0.12)
- [3] Score: 0.82 | 'Spacewalk Thoughts' by Orbit Bloom
-     (Actuals -> Genre: ambient, Mood: chill, Energy: 0.28)
- [4] Score: 0.76 | 'So What' by Miles Davis
-     (Actuals -> Genre: jazz, Mood: smooth, Energy: 0.34)
- [5] Score: 0.75 | 'Library Rain' by Paper Lanterns
-     (Actuals -> Genre: lofi, Mood: chill, Energy: 0.35)
----------------------------------------------------------------------------
-
-🚀 STRESS TESTING: Profile 3: Un-biasable Middle-Grounder ('The Perfect Gray Area')
-   Criteria -> Genre: rock, Mood: energetic, Target Energy: 0.5
----------------------------------------------------------------------------
- [1] Score: 2.59 | 'Storm Runner' by Voltline
-     (Actuals -> Genre: rock, Mood: intense, Energy: 0.91)
- [2] Score: 0.98 | 'Bury a Friend' by Billie Eilish
-     (Actuals -> Genre: dark pop, Mood: eerie, Energy: 0.48)
- [3] Score: 0.95 | 'Texas Sun' by Leon Bridges & Khruangbin
-     (Actuals -> Genre: soul, Mood: chilled, Energy: 0.55)
- [4] Score: 0.92 | 'Midnight Coding' by LoRoom
-     (Actuals -> Genre: lofi, Mood: chill, Energy: 0.42)
- [5] Score: 0.9 | 'Focus Flow' by LoRoom
-     (Actuals -> Genre: lofi, Mood: focused, Energy: 0.4)
----------------------------------------------------------------------------
-```
-
-### [LOG SET B] Phase 4 Experimental Weight Modification Results
+### Stress Test Results (Terminal Log Output)
 
 ```text
 🚀 EXPERIMENTAL STRESS TESTING: Profile 1: Paradoxical Request ('Anxious High-Energy Joy')
@@ -142,8 +93,8 @@ The scoring system exhibits an overwhelming structural bias toward categorical g
 ```
 
 ### Profile Comparisons and Analysis (Sensitivity Experiment)
-* **Impact of Weight Adjustments on Profile 1:** In the original baseline evaluation, the top track (*Gym Hero*, Score: 2.98) completely overshadowed candidates outside its genre due to the massive +2.0 genre spike. Under the experimental weights (Genre halved to 1.0, Energy doubled to a scale factor of 2.0), *Gym Hero* remained at rank 1 with a score of 2.96. However, non-genre tracks with perfect target energy alignments surged in competitiveness. For instance, *Spitfire* by The Prodigy (a non-pop electronic track matching the 0.95 energy target exactly) climbed from a baseline score of 1.00 up to rank 3 with an experimental score of 2.00, demonstrating that the engine is now significantly more responsive to mathematical feature distances.
-* **Sensitivity Shifts in Profile 2:** When evaluating the unavailable "classical" genre, the categorical genre incentive drops to 0 across all tracks. In the baseline system, categorical mood alignment dominated completely, pushing *Focus Flow* ahead of *Weightless* by a large margin (1.70 vs. 0.98). Under the experimental system, doubling the value of proximity calculations drastically narrowed this gap. *Weightless* (which sits perfectly at an ultra-low energy score of 0.12) moved to rank 2 with a highly competitive score of 1.96—nearly matching *Focus Flow* at 2.40.
+* **Impact of Weight Adjustments on Profile 1:** In the original baseline evaluation, the top track (*Gym Hero*, Score: 2.98) completely overshadowed candidates outside its genre due to the massive +2.0 genre spike. Under the experimental weights (Genre halved to 1.0, Energy doubled to a scale factor of 2.0), *Gym Hero* remained at rank 1 with a score of 2.96. However, non-genre tracks with perfect target energy alignments surged in competitiveness. For instance, *Spitfire* by The Prodigy (a non-pop electronic track matching the 0.95 energy target exactly) climbed to rank 3 with a score of 2.00, demonstrating that the engine is now significantly more responsive to mathematical feature distances.
+* **Sensitivity Shifts in Profile 2:** When evaluating the unavailable "classical" genre, the categorical genre incentive drops to 0 across all tracks. In the baseline system, categorical mood alignment dominated completely, pushing *Focus Flow* ahead of *Weightless* by a large margin. Under the experimental system, doubling the value of proximity calculations drastically narrowed this gap. *Weightless* (which sits perfectly at an ultra-low energy score of 0.12) moved to rank 2 with a highly competitive score of 1.96—nearly matching *Focus Flow* at 2.40.
 * **Behavior of Profile 3:** Under the original configuration, the midpoint energy target (0.50) penalized extreme-energy songs heavily, yet *Storm Runner* (0.91 energy) dominated entirely because its +2.0 rock genre bonus outplayed its poor energy alignment. In this experiment, cutting the genre bonus in half lowered *Storm Runner's* score from 2.59 down to 2.18. This allowed tracks like *Bury a Friend* (0.48 energy) and *Texas Sun* (0.55 energy) to close the distance significantly, proving that scaling down dominant categorical weights reduces artificial ranking separation.
 
 ### Plain Language Summary
