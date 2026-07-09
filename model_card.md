@@ -8,49 +8,30 @@
 
 ## 2. Intended Use  
 
-Describe what your recommender is designed to do and who it is for. 
-
-Prompts:  
-- What kind of recommendations does it generate  
-- What assumptions does it make about the user  
-- Is this for real users or classroom exploration  
+This model is an experimental music recommender designed to sort a curated song catalog against specific user behavioral attributes. It acts as a pedagogical simulation for exploring algorithmic design constraints, rather than an engine for live corporate streaming deployments. It assumes that a user's complex acoustic intent can be modeled by breaking tastes down into three straightforward dimensions: a favorite overarching genre category, a preferred immediate emotional mood tag, and a continuous target energy range value between 0.0 and 1.0.
 
 ---
 
 ## 3. How the Model Works  
 
-Explain your scoring approach in simple language.  
+The recommender operates via an additive linear scoring hierarchy that scans every track in an active catalog and assigns points based on cross-attribute alignments. In our original baseline setup, a song is evaluated across three primary dimensions:
+- **Genre Matching:** Yields a high categorical bonus of `+2.0` points if the text strings match perfectly.
+- **Mood Matching:** Yields a categorical bonus of `+1.0` point if the semantic label matches exactly.
+- **Energy Distance:** Computes continuous mathematical proximity using absolute error ($1.0 - |target\_energy - song\_energy|$), contributing a continuous fraction up to a max of `+1.0` point.
 
-Prompts:  
-- What features of each song are used (genre, energy, mood, etc.)  
-- What user preferences are considered  
-- How does the model turn those into a score  
-- What changes did you make from the starter logic  
-
-Avoid code here. Pretend you are explaining the idea to a friend who does not program.
+In our Phase 4 experimental iteration (`score_song_experimental_weights`), we adjusted the feature hierarchy to study mathematical sensitivity. We reduced the categorical genre weight to `+1.0` point and doubled the continuous energy similarity scale factor to a maximum multiplier of `2.0`. This successfully repositioned continuous track audio features above categorical taxonomies.
 
 ---
 
 ## 4. Data  
 
-Describe the dataset the model uses.  
-
-Prompts:  
-- How many songs are in the catalog  
-- What genres or moods are represented  
-- Did you add or remove data  
-- Are there parts of musical taste missing in the dataset  
+The catalog utilizes a merged framework comprising 17 tracks across 10 metadata columns, tracking attributes such as title, artist, genre, mood, energy, tempo, and acoustic properties. This dataset pairs simulated, code-generated laboratory records (e.g., electronic lofi and indie-pop archetypes designed for verification tests) with real-world iconic tracks (e.g., Marconi Union, Billie Eilish, and Metallica) to enrich variance. Missing values for continuous metrics in the real-world dataset (such as valence or tempo) are automatically populated with safe fallback null representations to ensure that baseline framework parsing does not trigger structural application failures.
 
 ---
 
 ## 5. Strengths  
 
-Where does your system seem to work well  
-
-Prompts:  
-- User types for which it gives reasonable results  
-- Any patterns you think your scoring captures correctly  
-- Cases where the recommendations matched your intuition  
+The pipeline handles direct, non-contradictory requests exceptionally well. When a user's intent is well-represented in the data (such as searching cleanly for high-energy pop or low-energy lofi), the additive scoring yields highly logical rankings. Furthermore, string normalizations are robust; the application strips and lowercases string variables prior to scoring evaluations, preventing trailing whitespaces or uppercase mismatches from impacting categorical calculations.
 
 ---
 
@@ -65,56 +46,56 @@ The scoring system exhibits an overwhelming structural bias toward categorical g
 ### Stress Test Results (Terminal Log Output)
 
 ```text
-🚀 STRESS TESTING: Profile 1: Paradoxical Request ('Anxious High-Energy Joy')
+🚀 EXPERIMENTAL STRESS TESTING: Profile 1: Paradoxical Request ('Anxious High-Energy Joy')
    Criteria -> Genre: pop, Mood: sad, Target Energy: 0.95
 ---------------------------------------------------------------------------
- [1] Score: 2.98 | 'Gym Hero' by Max Pulse
+ [1] Score: 2.96 | 'Gym Hero' by Max Pulse
      (Actuals -> Genre: pop, Mood: intense, Energy: 0.93)
- [2] Score: 2.87 | 'Sunrise City' by Neon Echo
+ [2] Score: 2.74 | 'Sunrise City' by Neon Echo
      (Actuals -> Genre: pop, Mood: happy, Energy: 0.82)
- [3] Score: 1.0 | 'Spitfire' by The Prodigy
+ [3] Score: 2.0 | 'Spitfire' by The Prodigy
      (Actuals -> Genre: electronic, Mood: aggressive, Energy: 0.95)
- [4] Score: 0.97 | 'Master of Puppets' by Metallica
+ [4] Score: 1.94 | 'Master of Puppets' by Metallica
      (Actuals -> Genre: metal, Mood: intense, Energy: 0.92)
- [5] Score: 0.96 | 'Storm Runner' by Voltline
+ [5] Score: 1.92 | 'Storm Runner' by Voltline
      (Actuals -> Genre: rock, Mood: intense, Energy: 0.91)
 ---------------------------------------------------------------------------
 
-🚀 STRESS TESTING: Profile 2: Genre-Defying Pure Vibe ('The Fluid Acoustic')
+🚀 EXPERIMENTAL STRESS TESTING: Profile 2: Genre-Defying Pure Vibe ('The Fluid Acoustic')
    Criteria -> Genre: classical, Mood: focused, Target Energy: 0.1
 ---------------------------------------------------------------------------
- [1] Score: 1.7 | 'Focus Flow' by LoRoom
+ [1] Score: 2.4 | 'Focus Flow' by LoRoom
      (Actuals -> Genre: lofi, Mood: focused, Energy: 0.4)
- [2] Score: 0.98 | 'Weightless' by Marconi Union
+ [2] Score: 1.96 | 'Weightless' by Marconi Union
      (Actuals -> Genre: ambient, Mood: calm, Energy: 0.12)
- [3] Score: 0.82 | 'Spacewalk Thoughts' by Orbit Bloom
+ [3] Score: 1.64 | 'Spacewalk Thoughts' by Orbit Bloom
      (Actuals -> Genre: ambient, Mood: chill, Energy: 0.28)
- [4] Score: 0.76 | 'So What' by Miles Davis
+ [4] Score: 1.52 | 'So What' by Miles Davis
      (Actuals -> Genre: jazz, Mood: smooth, Energy: 0.34)
- [5] Score: 0.75 | 'Library Rain' by Paper Lanterns
+ [5] Score: 1.5 | 'Library Rain' by Paper Lanterns
      (Actuals -> Genre: lofi, Mood: chill, Energy: 0.35)
 ---------------------------------------------------------------------------
 
-🚀 STRESS TESTING: Profile 3: Un-biasable Middle-Grounder ('The Perfect Gray Area')
+🚀 EXPERIMENTAL STRESS TESTING: Profile 3: Un-biasable Middle-Grounder ('The Perfect Gray Area')
    Criteria -> Genre: rock, Mood: energetic, Target Energy: 0.5
 ---------------------------------------------------------------------------
- [1] Score: 2.59 | 'Storm Runner' by Voltline
+ [1] Score: 2.18 | 'Storm Runner' by Voltline
      (Actuals -> Genre: rock, Mood: intense, Energy: 0.91)
- [2] Score: 0.98 | 'Bury a Friend' by Billie Eilish
+ [2] Score: 1.96 | 'Bury a Friend' by Billie Eilish
      (Actuals -> Genre: dark pop, Mood: eerie, Energy: 0.48)
- [3] Score: 0.95 | 'Texas Sun' by Leon Bridges & Khruangbin
+ [3] Score: 1.9 | 'Texas Sun' by Leon Bridges & Khruangbin
      (Actuals -> Genre: soul, Mood: chilled, Energy: 0.55)
- [4] Score: 0.92 | 'Midnight Coding' by LoRoom
+ [4] Score: 1.84 | 'Midnight Coding' by LoRoom
      (Actuals -> Genre: lofi, Mood: chill, Energy: 0.42)
- [5] Score: 0.9 | 'Focus Flow' by LoRoom
+ [5] Score: 1.8 | 'Focus Flow' by LoRoom
      (Actuals -> Genre: lofi, Mood: focused, Energy: 0.4)
 ---------------------------------------------------------------------------
 ```
 
-### Profile Comparisons and Analysis
-* **Profile 1 vs. Dataset Reality:** Testing a contradictory request ("High-Energy Sad Pop") revealed that the mathematical bonus for matching "pop" (+2.0) completely overpowered the user's emotional request for "sad" music. The system recommended "Gym Hero" (an intense workout track) as its top choice, completely failing the user's real mood constraint.
-* **Profile 2 Overrides:** Testing an unavailable genre ("classical") successfully stripped away the genre bias. This revealed a secondary surprise: categorical "mood" matching completely overrides raw "energy distance." "Focus Flow" beat out "Weightless" because its explicit "focused" tag provided +1.0 point, even though "Weightless" sat almost perfectly on the user's continuous energy target.
-* **Profile 3 Midpoint Behavior:** Placing the energy target at exactly `0.5` severely penalized both hyper-high and hyper-low tracks. This forced the system to lean entirely on how well rock music was represented in our dataset, causing the extreme track "Storm Runner" to dominate simply due to its heavy +2.0 genre alignment bonus.
+### Profile Comparisons and Analysis (Sensitivity Experiment)
+* **Impact of Weight Adjustments on Profile 1:** In the original baseline evaluation, the top track (*Gym Hero*, Score: 2.98) completely overshadowed candidates outside its genre due to the massive +2.0 genre spike. Under the experimental weights (Genre halved to 1.0, Energy doubled to a scale factor of 2.0), *Gym Hero* remained at rank 1 with a score of 2.96. However, non-genre tracks with perfect target energy alignments surged in competitiveness. For instance, *Spitfire* by The Prodigy (a non-pop electronic track matching the 0.95 energy target exactly) climbed to rank 3 with a score of 2.00, demonstrating that the engine is now significantly more responsive to mathematical feature distances.
+* **Sensitivity Shifts in Profile 2:** When evaluating the unavailable "classical" genre, the categorical genre incentive drops to 0 across all tracks. In the baseline system, categorical mood alignment dominated completely, pushing *Focus Flow* ahead of *Weightless* by a large margin. Under the experimental system, doubling the value of proximity calculations drastically narrowed this gap. *Weightless* (which sits perfectly at an ultra-low energy score of 0.12) moved to rank 2 with a highly competitive score of 1.96—nearly matching *Focus Flow* at 2.40.
+* **Behavior of Profile 3:** Under the original configuration, the midpoint energy target (0.50) penalized extreme-energy songs heavily, yet *Storm Runner* (0.91 energy) dominated entirely because its +2.0 rock genre bonus outplayed its poor energy alignment. In this experiment, cutting the genre bonus in half lowered *Storm Runner's* score from 2.59 down to 2.18. This allowed tracks like *Bury a Friend* (0.48 energy) and *Texas Sun* (0.55 energy) to close the distance significantly, proving that scaling down dominant categorical weights reduces artificial ranking separation.
 
 ### Plain Language Summary
 When analyzing how the system behaves, it becomes clear that our algorithm treats song features like an unequal hierarchy rather than a balanced mix. For example, when a user asks for "Anxious High-Energy Joy" (Pop, Sad, 0.95 Energy), the song "Gym Hero" shoots straight to the top of the list. To a human, recommending an intense gym-workout song to someone who specifically asked for "sad" music feels completely wrong. 
@@ -125,21 +106,10 @@ However, because our code awards a massive 2.0-point bonus just for matching the
 
 ## 8. Future Work  
 
-Ideas for how you would improve the model next.  
-
-Prompts:  
-- Additional features or preferences  
-- Better ways to explain recommendations  
-- Improving diversity among the top results  
-- Handling more complex user tastes  
+To advance this engine, the recommendation scoring pipeline should move away from hardcoded additive metrics and shift toward a normalized vector space similarity framework, such as Cosine Similarity. This transition would evaluate songs along an evenly distributed dimensional plane rather than allowing a single dominant string feature to overpower others. Additionally, incorporating secondary real-world metadata attributes—such as *acousticness* or *danceability*—would establish a multi-layered model of sonic profiles. This development would empower the engine to identify fluid acoustic vibes even when users supply completely novel or mismatched genre labels.
 
 ---
 
 ## 9. Personal Reflection  
 
-A few sentences about your experience.  
-
-Prompts:  
-- What you learned about recommender systems  
-- Something unexpected or interesting you discovered  
-- How this changed the way you think about music recommendation apps
+Building and stress-testing this recommendation engine revealed that simple sorting algorithms can easily introduce severe structural design biases. I discovered that minor imbalances in how point rewards are weighted can entirely suppress user preferences, transforming an interactive playlist engine into a rigid filter. This experiment has changed how I perceive standard music streaming applications; I now recognize that behind every playlist recommendation lies an intricate math equation balancing organizational categorization defaults against raw mathematical measurements of personal taste.
