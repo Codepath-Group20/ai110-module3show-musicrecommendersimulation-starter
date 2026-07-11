@@ -17,7 +17,9 @@ This model is an experimental music recommender designed to sort a curated song 
 The recommender operates via an additive linear scoring hierarchy that scans every track in an active catalog and assigns points based on cross-attribute alignments. In our original baseline setup, a song is evaluated across three primary dimensions:
 - **Genre Matching:** Yields a high categorical bonus of `+2.0` points if the text strings match perfectly.
 - **Mood Matching:** Yields a categorical bonus of `+1.0` point if the semantic label matches exactly.
-- **Energy Distance:** Computes continuous mathematical proximity using absolute error ($1.0 - |target\_energy - song\_energy|$), contributing a continuous fraction up to a max of `+1.0` point.
+- **Energy Distance:** Computes continuous mathematical proximity using absolute error, contributing a continuous fraction up to a max of `+1.0` point:
+
+`Score = 1.0 - abs(target_energy - song_energy)`
 
 In our Phase 4 experimental iteration (`score_song_experimental_weights`), we adjusted the feature hierarchy to study mathematical sensitivity. We reduced the categorical genre weight to `+1.0` point and doubled the continuous energy similarity scale factor to a maximum multiplier of `2.0`. This successfully repositioned continuous track audio features above categorical taxonomies.
 
